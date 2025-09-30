@@ -1,0 +1,8 @@
+tokenizer_name: "bert-base-uncased"
+model_path: "../Models/dapt_50k"
+batch_size: 16
+max_length: 300
+checkpoint_dir: "../checkpoints"
+checkpoint_interval: 2
+data_path: "../Datasets/dataset_10k_val.csv"
+path_technical_terms: "../Datasets/technical_terms_tokenized_BERT.csv"

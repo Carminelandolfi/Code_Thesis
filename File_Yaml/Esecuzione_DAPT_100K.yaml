@@ -1,0 +1,12 @@
+tokenizer_name: "bert-base-uncased"
+model_path: "../Models/bert-base-uncased/models--bert-base-uncased/snapshots/86b5e0934494bd15c9632b12f734a8a67f723594"
+batch_size: 16
+epochs: 3
+learning_rate: 0.00002
+max_length: 300
+checkpoint_dir: "../checkpoints"
+checkpoint_interval: 2
+data_path: "../Datasets/dataset_100k.csv"
+data_path_val: "../Datasets/dataset_10k_val.csv"
+output_model_path: "../Models/dapt_100k_2"
+plot_save_path: "../Plots/DAPT_100k_2.png"

@@ -1,0 +1,14 @@
+tokenizer_name: "bert-base-uncased"
+model_path: "../Models/dapt_100k"
+batch_size: 16
+epochs: 3
+learning_rate: 0.00002
+weight_decay: 0.01
+max_length: 300
+freeze_bert: false
+save_checkpoints: true
+checkpoint_dir: "../checkpoints"
+checkpoint_interval: 2
+data_path: "../Datasets/dataset_remaining.csv"
+output_dir: "../Models/Fine_tuned_100k"
+plot_path: "../Plots/Fine_tuning_DAPT_100k.png"

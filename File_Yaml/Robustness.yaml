@@ -1,0 +1,11 @@
+data_target_path: "../Datasets/dataset_remaining.csv"
+data_path: "../Datasets/cleaned_dataset.csv"
+model_path: "../Models/Fine_tuned"
+tokenizer_name: "bert-base-uncased"
+top_k: 200
+min_sent_len: 20
+n_sentences_at_time: 2
+max_length: 300
+batch_size: 16
+name_model: "Bert_base"
+results_csv: "../Datasets/robustness_results.csv"

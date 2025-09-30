@@ -1,0 +1,8 @@
+tokenizer_name: "allenai/scibert_scivocab_uncased"
+model_path: "../Models/scibert_scivocab_uncased/scibert_scivocab_uncased"
+batch_size: 16
+max_length: 300
+checkpoint_dir: "../checkpoints"
+checkpoint_interval: 2
+data_path: "../Datasets/dataset_10k_val_SciBERT.csv"
+path_technical_terms: "../Datasets/technical_terms_tokenized_SciBERT.csv"

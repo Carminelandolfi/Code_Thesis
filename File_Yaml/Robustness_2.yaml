@@ -1,0 +1,11 @@
+data_target_path: "../Datasets/dataset_remaining.csv"
+data_path: "../Datasets/cleaned_contaminate_2_dataset.csv"
+model_path: "../Models/Fine_tuned_SciBERT"
+tokenizer_name: "allenai/scibert_scivocab_uncased"
+top_k: 200
+min_sent_len: 20
+n_sentences_at_time: 5
+max_length: 300
+batch_size: 16
+name_model: "SciBERT"
+results_csv: "../Datasets/robustness_contaminated_2_results.csv"

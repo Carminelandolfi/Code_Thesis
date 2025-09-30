@@ -1,0 +1,14 @@
+tokenizer_name: "allenai/scibert_scivocab_uncased"
+model_path: "../Models/scibert_scivocab_uncased/scibert_scivocab_uncased"
+batch_size: 16
+epochs: 3
+learning_rate: 0.00002
+weight_decay: 0.01
+max_length: 300
+freeze_bert: false
+save_checkpoints: true
+checkpoint_dir: "../checkpoints"
+checkpoint_interval: 2
+data_path: "../Datasets/dataset_remaining_SciBERT.csv"
+output_dir: "../Models/Fine_tuned_SciBERT"
+plot_path: "../Plots/Fine_tuning_SciBERT.png"
