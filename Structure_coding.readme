@@ -1,0 +1,49 @@
+L?obiettivo del lavoro è quello di applicare il modello BERT su un corpus di abstract di paper scientifici a tema Computer Sciences. Il modello sarà applicato in diverse versioni: 
+- Il modello BERT originale
+- Il modello BERT attraverso il DAPT usando 3 dimensioni differenti per il dataset: 10k, 50k e 100k.
+- Il modello SciBERT, ovvero, una versione specializzata del modello BERT addestrato solo su un linguaggio di paper scientifici.
+
+In particolari tali modelli saranno usati per effettuare una classificazione sulla classe primaria di ogni abstract. Quindi, usare metriche di performance per comprendere quale modello performa meglio e in quale situazione, in modo da comprendere i punti di forza e i limiti di tali modelli e quindi cercare di individuare la soluzione migliore per ogni situazione.
+
+Nel mio lavoro il codice è stato suddiviso in numerosi file in modo da avere un codice più strutturato e flessibile garantendo una comprensione semplificata del lavoro svolto.
+
+Per poter analizzare tali dati è necessario effettuare un analisi esplorativa dei dati considerati, in modo da comprendere che tipo di pre-processing effettuare per poter massimizzare le perfomance del modello.
+
+Il file "01_Preprocessing" si occupa di fare ciò. Tutti i grafici saranno salvati nella cartella Plots.
+
+Successivamente lo step successivo è necessario effettuare il pre-processing. 
+La prima operazione di pre-processing la pulizia degli abstract, in quanto, essendo estratti da "ArXIV" presentano comandi latex negli abstract e inoltre presentano anche formule, elenchi puntati etc. Il file "02_Cleaning_Dataset" ha l'obiettivo di ripulire tutte le incongruenze e le limitazioni per il modello. Gli abstract puliti vengono memorizzati nel dataset "cleaned_dataset" nella cartella Datasets.
+
+Dopo la pulizia è sort un ulteriore problema dato dalla lunghezza degli abstract. Infatti, BERT permette di gestire frasi composte da massimo 500 token e inoltre, dati i limiti computazionali e l'analisi esplorativa si è deciso di settare la lunghezza massima degli abstract a 300. 
+Il file "02_Identify_seq_gt_300" ha l'obiettivo di fare ciò. In questo file si individuano gli abstract che hanno un numero di token < 300 dopo aver effettuato la tokenizzazione e crea un file CSV chiamato "Index_del.csv", contenuto nella cartella Datasets, che contiene gli indici da non considerare per le nostre analisi. 
+
+LO step successivo consiste nel creare i dataset per poter applicare i modelli BERT e SciBERT. I file "03_creazione_Dataset" e "03_creazione_Dataset_SciBERT" permettono di creare i dataset per i rispettivi modelli. I dataset conteranno le colonne: 
+- abstract_clean: contiene gli bstract originali dopo la pulizia
+- Input_ids: contiene gli id di ogni token codificato
+- attention_mask: permette di identificare i token a cui è stato applicato il padding (assume 0) da quelli a cui non è stato applicato il padding ( assume 1).
+
+Sono stati definiti due file differenti per BERT e SciBERT, in quanto si basano su dizionari differenti e quindi le codifiche dei token non corrispondono.
+
+Siccome un altro obiettivo è quello di valutar ela robustezza dei vari modelli e la comprensione dei vari modelli. Si è pensato di estrarre i termini tecnici più rilevanti, tramite TF-IDF, il file utilizzato per questo obiettivo è "03_Technical_Terms". Il file si occuopa di salvare su 2 file CSV la tokenizzazione per BERT e per SciBERT di tali termini. I file sono chiamati "technical_terms_tokenized_BERT.csv" e "technical_terms_tokenized_SciBERT.csv".
+
+Successivamente è possibile applicare il modello BERT ai dati disponibili. Come accennato precedentemente in questo lavoro vengono applicate differenti versioni:
+- BERT originale;
+- DAPT su 10k, 50k e 100 k abstract;
+- SciBERT.
+
+Quindi il file successivo "04_DAPT_MLM" ha l'obiettivo di riaddestrare i mdoelli con il DAPT e successivamente crea il modello nella cartella Models.
+Per poter stabilire i parametri da usare per ogni DAPT sono stati creati diversi file YAML contenuti nella cartella File_Yaml. I file in questione sono nominati "Esecuzione_DAPT_  .yaml".  
+Nel file in considerazione addestra il dataset e infine calcola anche la loss durante l'addestramento in modo da poter monitorare il progresso ottenuto durante l'addestramento. Infine, viene creato un  grafico a linee che mostra l'evoluzione della loss sia per il train che per il test ogni 200 steps.
+
+
+Il file successivo "05_MLM_Performance" consiste nel verificare le performance sul validation set dei vari modelli compresi BERT base e SciBERT. Oltre alla loss vengono calcolate anche altre metriche Accuracy, F1 e Recall. Tali metriche sono fondamentali per poter comparare i vari modelli. Anche in questo caso sono stai creati i file YAML per poter settare i vari parametri e i file iniziano con "Esecuzione_Perf_   .yaml".
+
+Oltre a valutare le performance del modello mediante MLM casuale si è pensato di effettuare un mascheramento basato solo su termini tecnici. Il file in questione è "05_MLM_Performance_Tech". In questo file si applica un mascheramento solo ai termini tecninci e si valutano le performance dei vari modelli su questi termini.
+
+Infine, sono stati creati i file "06_Fine_Tuning" e "06_Fine_Tuning_SciBERT". Tali file hanno l'obiettivo di adattare i modelli BERT e SciBERT per poter fare classificazione e quindi è necessario aggiungere dei layer ai modelli e addestrare sia i nuovi layer, sia i precedenti per poter classificare i vari abstract. Anche in questo caso i file sono collegati a dei file YAML "Esecuzione_Fine_Tuning  .yaml" e "Esecuzione_Fine_Tuning_SciBERT.yaml". Infine, i file "06_Fine_Tuning" e "06_Fine_Tuning_SciBERT" salvano i modello ottenuti nella cartella Models.
+
+Per comprendere quale modello è migliore è necessario valutare anche la robustezza del modello. Per poter fare ciò, è stato creato il file "07_Robustness". Tale file consiste nell'andare a creare un pool di 200 frasi più rappresentative per ogni classe mediante il TF-IDF. Tale pool serve per contaminare i vari abstract. Le performance dei modelli vengono salvate nel file CSV "robustness_results.csv".
+
+Infine, oltre a considerare una contaminazione effettuata usando frasi di altre categorie, ma comunque legate in quanto il macrotema è lo stesso. Si è pensato di effettuare una contaminazione considerando frasi di abstract di paper, ma considerando paper in ambito letterario. In questo modo è possibile valutare se c'è differenza tra i risultati ottenuti prima e ora. Il file è "08_Robustness_Contaminated". Anche in questo caso le performance dei modelli sono salvate nel file CSV "robustness_contaminated_results.csv".
+
+Per poter fare ciò è stato necessario estrarre gli abstract a tema letterartio da ArXIV. Il file "08_Abstract_letterari" permette di fare ciò e crea un dataset su un file CSV chiamato "abstract_letterari.CSV".  Tale dataset viene passato nel file "08_Cleaning_abstract_letterari" che si occupa di pulire il dataset come fa il file "02_Cleaning_Datasets" e infine viene eseguito il file "08_Robustness_Contaminated".
